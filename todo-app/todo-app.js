@@ -1,3 +1,5 @@
+/*jshint esversion:6*/
+
 const todoList = [{
     todo: 'Learn JS',
     completed: false
@@ -21,25 +23,22 @@ const todoList = [{
 
 
 
-
-
-document.querySelector('#add-todo').addEventListener('click', function () {
-    console.log('You have added a new todo');
-});
-
-document.querySelector('#todo-text').addEventListener('input', function(e) {
-    console.log(e.target.value);
-});
-
-
-
 const filters = {
-    searchText: ''
+    searchText: '',
+    hideCompleted: false
 }
 
 const renderTodos = function (todoList, filters) {
-    const filteredTodos = todoList.filter(function (todo) {
+    let filteredTodos = todoList.filter(function (todo) {
         return todo.todo.toLowerCase().includes(filters.searchText.toLowerCase());
+    });
+
+    filteredTodos = filteredTodos.filter(function (todo) {
+      if (filters.hideCompleted == true) {
+        return !todo.completed;
+      } else {
+        return true;
+      }
     });
 
     const incompleteTodos = filteredTodos.filter(function (todo) {
@@ -52,6 +51,9 @@ const renderTodos = function (todoList, filters) {
     todoCount.textContent = `You have ${incompleteTodos.length} todos left`;
     document.querySelector('#todos').appendChild(todoCount);
     
+
+
+   
     
     filteredTodos.forEach(function (todo) {
         const p = document.createElement('p');
@@ -61,8 +63,12 @@ const renderTodos = function (todoList, filters) {
     });
 
    
+  
+   
 
 };
+
+
 
 renderTodos(todoList, filters);
 
@@ -70,6 +76,23 @@ document.querySelector('#search-todos').addEventListener('input', function(e) {
     filters.searchText = e.target.value;
     renderTodos(todoList, filters);
 });
+
+document.querySelector('#add-todo').addEventListener('submit', function (e) {
+  const p = document.createElement('p');
+  e.preventDefault();
+  p.textContent = e.target.elements.addTodo.value; 
+  todoList.push ({todo: e.target.elements.addTodo.value, completed: false});
+  document.querySelector('#todos').appendChild(p);
+  e.target.elements.addTodo.value = '';
+  renderTodos(todoList, filters);
+});
+
+document.querySelector('#hide-completed').addEventListener('change', function(e) {
+  filters.hideCompleted = e.target.checked;
+  renderTodos(todoList, filters);
+});
+
+
 
 
 

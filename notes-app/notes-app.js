@@ -1,3 +1,5 @@
+/*jshint esversion:6*/
+
 const notes = [ {
     title: 'My next trip',
     body: 'I would like to go to Switzerland'
@@ -12,6 +14,17 @@ const notes = [ {
 const filters = {
     searchText: ''
 };
+
+// const user = {
+//   name:'Ethan',
+//   age: 28
+// };
+
+// const userJSON = JSON.stringify(user);
+// localStorage.setItem('user', userJSON);
+
+const userJSON = localStorage.getItem('user');
+const user = JSON.parse(userJSON);
 
 const renderNotes = function (notes, filters) {
     const filteredNotes = notes.filter(function (note) {
@@ -41,7 +54,9 @@ document.querySelector('#search-text').addEventListener('input', function (e) {
 });
 
 
-
+document.querySelector('#filter-by').addEventListener('change', function (e) {
+  console.log(e.target.value)
+})
 //DOM - Document Object Model
 
 // const p = document.querySelector('p')
