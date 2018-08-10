@@ -1,26 +1,14 @@
 /*jshint esversion:6*/
 
-const todoList = [{
-    todo: 'Learn JS',
-    completed: false
-}, {
-    todo: 'Exercise',
-    completed: false
-}, {
-    todo: 'Eat Healthy',
-    completed: false
-
-}, {
-    todo: 'Walk Dog',
-    completed: true
-}, {
-    todo: 'Get to bed early',
-    completed: true
-}]
+let todoList = []
 
 // You have x todos left
 
+const todoJSON = localStorage.getItem('todoList');
 
+if (todoJSON !== null) {
+  todoList = JSON.parse(todoJSON);
+}
 
 
 const filters = {
@@ -57,7 +45,13 @@ const renderTodos = function (todoList, filters) {
     
     filteredTodos.forEach(function (todo) {
         const p = document.createElement('p');
-        p.textContent = todo.todo;
+        
+        if (todo.todo.length > 0) {
+          p.textContent = todo.todo;
+        } else {
+          p.textContent = 'Unnamed note';
+        }
+
         document.querySelector('#todos').appendChild(p);
        
     });
@@ -81,9 +75,13 @@ document.querySelector('#add-todo').addEventListener('submit', function (e) {
   const p = document.createElement('p');
   e.preventDefault();
   p.textContent = e.target.elements.addTodo.value; 
-  todoList.push ({todo: e.target.elements.addTodo.value, completed: false});
+  todoList.push ({
+    todo: e.target.elements.addTodo.value, 
+    completed: false
+  });
   document.querySelector('#todos').appendChild(p);
   e.target.elements.addTodo.value = '';
+  localStorage.setItem('todoList', JSON.stringify(todoList));
   renderTodos(todoList, filters);
 });
 
